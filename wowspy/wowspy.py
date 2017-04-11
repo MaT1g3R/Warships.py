@@ -6,8 +6,8 @@ from enum import Enum
 
 class Region(Enum):
     NA = 'com'
-    EU = 'ru'
-    RU = 'eu'
+    EU = 'eu'
+    RU = 'ru'
     AS = 'asia'
 
 
