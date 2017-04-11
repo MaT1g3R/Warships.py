@@ -1,4 +1,4 @@
-# WoWs.py
+# Warships.py  
 A  Python World of Warships API wrapper  
 Requires [requests](http://docs.python-requests.org/en/master/) library    
 
