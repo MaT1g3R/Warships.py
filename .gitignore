@@ -4,3 +4,6 @@
 test\.py
 
 api\.py
+setup.py
+
+*.pyc
