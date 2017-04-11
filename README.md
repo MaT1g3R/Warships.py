@@ -6,4 +6,4 @@ To install requests:
 Installation instruction:  
 ``pip install wowspy``  
 Example usage can be found in ``example.py``  
-Complete documentation can be found [here](https://developers.wargaming.net/reference)
+Please consult offical documentation [here](https://developers.wargaming.net/reference)
