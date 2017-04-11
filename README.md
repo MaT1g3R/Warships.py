@@ -1,2 +1,4 @@
 # WoWs.py
-A simple Python World of Warships API wrapper
+A  Python World of Warships API wrapper  
+Installation instruction:  
+``pip install wowspy``  

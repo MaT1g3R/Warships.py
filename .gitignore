@@ -7,3 +7,5 @@ api\.py
 setup.py
 
 *.pyc
+/MANIFEST
+/dist/
