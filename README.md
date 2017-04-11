@@ -1,6 +1,7 @@
 # WoWs.py
 A  Python World of Warships API wrapper  
-Requires [requests](http://docs.python-requests.org/en/master/) library  
+Requires [requests](http://docs.python-requests.org/en/master/) library    
+
 To install requests:  
 ``pip install requests``    
 
