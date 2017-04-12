@@ -854,13 +854,13 @@ class Wows:
         if in_garage is not None:
             in_garage = '1' if in_garage else '0'
         param = {
-            account_id: account_id,
-            access_token: access_token,
-            extra: extra,
-            fields: fields,
-            in_garage: in_garage,
-            language: language,
-            ship_id: ship_id
+            'account_id': account_id,
+            'access_token': access_token,
+            'extra': extra,
+            'fields': fields,
+            'in_garage': in_garage,
+            'language': language,
+            'ship_id': ship_id
         }
         return self.__get_res(region, 'ships', 'stats', param)
 
