@@ -1,7 +1,8 @@
 """A World of Warships API wrapper"""
-from requests import get
-from json import loads
 from enum import Enum
+from json import loads
+
+from requests import get
 
 
 class Region(Enum):
@@ -24,6 +25,7 @@ class Wows:
     """
     A World of Warships API wrapper
     """
+
     def __init__(self, key):
         self.__key = key
         self.__blankurl = 'https://api.worldofwarships.' \
@@ -158,8 +160,8 @@ class Wows:
         return self.__get_res(region, 'account', 'info', param)
 
     def player_achievements(self, region: Region, account_id,
-                            access_token: str=None, fields: str=None,
-                            language: str=None):
+                            access_token: str = None, fields: str = None,
+                            language: str = None):
         """
         Method returns information about players' achievements. 
         Accounts with hidden game profiles are excluded from response. 
@@ -203,9 +205,9 @@ class Wows:
         return self.__get_res(region, 'account', 'achievements', param)
 
     def player_statistics_by_date(self, region: Region, account_id,
-                                  access_token: str=None, dates: str=None,
-                                  extra: str=None, fields: str=None,
-                                  language: str=None):
+                                  access_token: str = None, dates: str = None,
+                                  extra: str = None, fields: str = None,
+                                  language: str = None):
         """
         Method returns statistics slices by dates in specified time span.
         :param region: The region that the method will use.
@@ -260,7 +262,8 @@ class Wows:
         return self.__get_res(region, 'account', 'statsbydate', param)
 
     def information_about_encyclopedia(self, region: Region,
-                                       fields: str=None, language: str=None):
+                                       fields: str = None,
+                                       language: str = None):
         """
         Method returns information about encyclopedia.
         
@@ -297,8 +300,8 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'info', param)
 
     def warships(self, region: Region,
-                 fields: str=None, language: str=None, nation: str=None,
-                 ship_id=None, type_: str=None):
+                 fields: str = None, language: str = None, nation: str = None,
+                 ship_id=None, type_: str = None):
         """
         Method returns the list of ships available.
         
@@ -351,7 +354,7 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'ships', param)
 
     def achievements(self, region: Region,
-                     fields: str=None, language: str=None):
+                     fields: str = None, language: str = None):
         """
         Method returns information about achievements.
         
@@ -388,12 +391,12 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'achievements', param)
 
     def ship_parameters(self, region: Region, ship_id: int,
-                        artillery_id: int=None, dive_bomber_id: int=None,
-                        engine_id: int=None, fields: str=None,
-                        fighter_id: int=None, fire_control_id: int=None,
-                        flight_control_id: int=None, hull_id: int=None,
-                        language: str=None, torpedo_bomber_id: int=None,
-                        torpedoes_id: int=None):
+                        artillery_id: int = None, dive_bomber_id: int = None,
+                        engine_id: int = None, fields: str = None,
+                        fighter_id: int = None, fire_control_id: int = None,
+                        flight_control_id: int = None, hull_id: int = None,
+                        language: str = None, torpedo_bomber_id: int = None,
+                        torpedoes_id: int = None):
         """
         Method returns parameters of ships in all existing configurations.
 
@@ -468,8 +471,8 @@ class Wows:
         }
         return self.__get_res(region, 'encyclopedia', 'shipprofile', param)
 
-    def modules(self, region: Region, fields: str=None, language: str=None,
-                module_id=None, type_: str=None):
+    def modules(self, region: Region, fields: str = None, language: str = None,
+                module_id=None, type_: str = None):
         """
         Method returns the list of available modules that can be installed on 
         ships, such as hulls, engines, etc. At least one input filter parameter 
@@ -525,8 +528,9 @@ class Wows:
         }
         return self.__get_res(region, 'encyclopedia', 'modules', param)
 
-    def exterior_items(self, region: Region, exterior_id=None, fields: str=None,
-                       language: str=None, type_: str=None):
+    def exterior_items(self, region: Region, exterior_id=None,
+                       fields: str = None,
+                       language: str = None, type_: str = None):
         """
         Method returns information about signals & camouflages.
 
@@ -570,7 +574,7 @@ class Wows:
         }
         return self.__get_res(region, 'encyclopedia', 'exterior', param)
 
-    def upgrades(self, region: Region, fields: str=None, language: str=None,
+    def upgrades(self, region: Region, fields: str = None, language: str = None,
                  upgrade_id=None):
         """
         Method returns the list of available ship upgrades.
@@ -613,7 +617,7 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'upgrades', param)
 
     def service_record_levels_information(self, region: Region,
-                                          fields: str=None):
+                                          fields: str = None):
         """
         Method returns information about Service Record levels.
 
@@ -629,8 +633,8 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'accountlevels',
                               {'fields': fields})
 
-    def commanders(self, region: Region, commander_id=None, fields: str=None,
-                   language: str=None):
+    def commanders(self, region: Region, commander_id=None, fields: str = None,
+                   language: str = None):
         """
         Method returns the information about Commanders.
         
@@ -670,8 +674,8 @@ class Wows:
         }
         return self.__get_res(region, 'encyclopedia', 'crews', param)
 
-    def commander_skills(self, region: Region, fields: str=None,
-                         language: str=None, skill_id=None):
+    def commander_skills(self, region: Region, fields: str = None,
+                         language: str = None, skill_id=None):
         """
         :param region: The region that the method will use.
 
@@ -710,8 +714,8 @@ class Wows:
         }
         return self.__get_res(region, 'encyclopedia', 'crewskills', param)
 
-    def commanders_ranks(self, region: Region, fields: str=None,
-                         language: str=None, nation: str=None):
+    def commanders_ranks(self, region: Region, fields: str = None,
+                         language: str = None, nation: str = None):
         """
         Method returns the information about Commanders' ranks.
 
@@ -751,7 +755,7 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'crewranks', param)
 
     def battle_types(self, region: Region,
-                     fields: str=None, language: str=None):
+                     fields: str = None, language: str = None):
         """
         The method returns information about battle types.
 
@@ -788,9 +792,9 @@ class Wows:
         return self.__get_res(region, 'encyclopedia', 'battletypes', param)
 
     def statistics_of_players_ships(self, region: Region, account_id: int,
-                                    access_token: str=None, extra: str=None,
-                                    fields: str=None, in_garage: bool=None,
-                                    language: str=None, ship_id=None):
+                                    access_token: str = None, extra: str = None,
+                                    fields: str = None, in_garage: bool = None,
+                                    language: str = None, ship_id=None):
         """
         Method returns general statistics for each ship of a player. 
         Accounts with hidden game profiles are excluded from response. 
@@ -864,8 +868,8 @@ class Wows:
         }
         return self.__get_res(region, 'ships', 'stats', param)
 
-    def ranked_battles_seasons(self, region: Region, fields: str=None,
-                               language: str=None, season_id=None):
+    def ranked_battles_seasons(self, region: Region, fields: str = None,
+                               language: str = None, season_id=None):
         """
         Method returns information about Ranked Battles seasons.
 
@@ -908,9 +912,9 @@ class Wows:
 
     def ships_statistics_in_ranked_battles(self, region: Region,
                                            account_id: int,
-                                           access_token: str=None,
-                                           fields: str=None,
-                                           language: str=None, season_id=None,
+                                           access_token: str = None,
+                                           fields: str = None,
+                                           language: str = None, season_id=None,
                                            ship_id=None):
         """
         Method returns players' ships statistics in Ranked Battles seasons. 
@@ -964,9 +968,9 @@ class Wows:
         return self.__get_res(region, 'seasons', 'shipstats', param)
 
     def players_statistics_in_ranked_battles(self, region: Region, account_id,
-                                             access_token: str=None,
-                                             fields: str=None,
-                                             language: str=None,
+                                             access_token: str = None,
+                                             fields: str = None,
+                                             language: str = None,
                                              season_id=None):
         """
         Method returns players' statistics in Ranked Battles seasons. 
@@ -1015,3 +1019,166 @@ class Wows:
             'season_id': season_id
         }
         return self.__get_res(region, 'seasons', 'accountinfo', param)
+
+    def clans(self, region: Region, fields: str = None, language: str = None,
+              limit: int = None, page_no: int = None, search: str = None):
+        """
+        Method searches through clans and sorts them in a specified order.
+        
+        :param region: The region that the method will use.
+        
+        :param fields: Response field. The fields are separated with commas. 
+        Embedded fields are separated with dots. To exclude a field, use “-” in 
+        front of its name. In case the parameter is not defined, 
+        the method returns all fields. Max limit is 100.                
+        
+        :param language: Localization language. Default depends on region.
+        Valid values:
+            "cs" — Čeština
+            "de" — Deutsch
+            "en" — English (Default for NA and EU)
+            "es" — Español
+            "fr" — Français
+            "ja" — 日本語
+            "pl" — Polski
+            "ru" — Русский (Default for RU)
+            "th" — ไทย (Default for AS)
+            "zh-tw" — 繁體中文        
+            
+        :param limit: Number of returned entries (fewer can be returned, 
+        but not more than 100). If the limit sent exceeds 100, 
+        a limit of 100 is applied (by default).
+        
+        :param page_no: Page number. Default is 1. Min value is 1.
+        
+        :param search: Part of name or tag for clan search. Minimum 2 characters
+        
+        :rtype: dict
+        """
+        param = {
+            'fields': fields,
+            'language': language,
+            'limit': limit,
+            'page_no': page_no,
+            'search': search
+        }
+        return self.__get_res(region, 'clans', 'list', param)
+
+    def clan_details(self, region: Region, clan_id, extra: str = None,
+                     fields: str = None, language: str = None):
+        """
+        Method returns detailed clan information.
+        
+        :param region: The region that the method will use.
+        
+        :param clan_id: Clan ID. Max limit is 100. Min value is 1.
+        
+        :param extra: Extra fields that will be added to the response. 
+        Valid values:
+            "members"
+
+        :param fields: Response field. The fields are separated with commas. 
+        Embedded fields are separated with dots. To exclude a field, use “-” in 
+        front of its name. In case the parameter is not defined, 
+        the method returns all fields. Max limit is 100.                        
+        
+        :param language: Localization language. Default depends on region.
+        Valid values:
+            "cs" — Čeština
+            "de" — Deutsch
+            "en" — English (Default for NA and EU)
+            "es" — Español
+            "fr" — Français
+            "ja" — 日本語
+            "pl" — Polski
+            "ru" — Русский (Default for RU)
+            "th" — ไทย (Default for AS)
+            "zh-tw" — 繁體中文                
+        
+        :rtype: dict
+        """
+        clan_id = _lst_of_int(clan_id, 'clan_id')
+        param = {
+            'clan_id': clan_id,
+            'extra': extra,
+            'fields': fields,
+            'language': language
+        }
+        return self.__get_res(region, 'clans', 'info', param)
+
+    def player_clan_data(self, region: Region, account_id, extra: str = None,
+                         fields: str = None, language: str = None):
+        """
+        Method returns player clan data. Player clan data exist only for 
+        accounts, that were participating in clan 
+        activities: sent join requests, were clan members etc.
+        
+        :param region: The region that the method will use.
+
+        :param account_id: Account ID. Max limit is 100. Min value is 1.
+        
+        :param extra: Extra fields that will be added to the response. 
+        Valid values:
+            "clan"
+            
+        :param fields: Response field. The fields are separated with commas. 
+        Embedded fields are separated with dots. To exclude a field, use “-” in 
+        front of its name. In case the parameter is not defined, 
+        the method returns all fields. Max limit is 100.                               
+        
+       :param language: Localization language. Default depends on region.
+        Valid values:
+            "cs" — Čeština
+            "de" — Deutsch
+            "en" — English (Default for NA and EU)
+            "es" — Español
+            "fr" — Français
+            "ja" — 日本語
+            "pl" — Polski
+            "ru" — Русский (Default for RU)
+            "th" — ไทย (Default for AS)
+            "zh-tw" — 繁體中文                
+        
+        :rtype: dict
+        """
+        account_id = _lst_of_int(account_id, 'account_id')
+        param = {
+            'account_id': account_id,
+            'extra': extra,
+            'fields': fields,
+            'language': language
+        }
+        return self.__get_res(region, 'clans', 'accountinfo', param)
+
+    def clan_glossary(self, region: Region, fields: str = None,
+                      language: str = None):
+        """
+        Method returns information on clan entities.
+        
+        :param region: The region that the method will use.
+        
+        :param fields: Response field. The fields are separated with commas. 
+        Embedded fields are separated with dots. To exclude a field, use “-” in 
+        front of its name. In case the parameter is not defined, 
+        the method returns all fields. Max limit is 100.                               
+        
+       :param language: Localization language. Default depends on region.
+        Valid values:
+            "cs" — Čeština
+            "de" — Deutsch
+            "en" — English (Default for NA and EU)
+            "es" — Español
+            "fr" — Français
+            "ja" — 日本語
+            "pl" — Polski
+            "ru" — Русский (Default for RU)
+            "th" — ไทย (Default for AS)
+            "zh-tw" — 繁體中文                
+        
+        :rtype: dict
+        """
+        param = {
+            'fields': fields,
+            'language': language
+        }
+        return self.__get_res(region, 'clans', 'glossary', param)
