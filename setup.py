@@ -2,10 +2,10 @@ from setuptools import find_packages, setup
 
 from wowspy import *
 
-with open('./requirements.txt') as f:
+with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-with open('./README.md') as f:
+with open('README.md') as f:
     readme = f.read()
 
 setup(

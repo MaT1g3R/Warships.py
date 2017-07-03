@@ -4,7 +4,7 @@ from .wowspy_async import WowsAsync
 
 __author__ = 'MaT1g3R'
 __title__ = 'wowspy'
-__version__ = '1.2.1'
+__version__ = '1.2.2'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2017 MaT1g3R'
 
