@@ -3,9 +3,9 @@
 
 test\.py
 
-api\.py
-setup.py
 
 *.pyc
 /MANIFEST
 /dist/
+
+wowspy\.egg-info/

@@ -1,36 +1,43 @@
-"""A World of Warships API wrapper with Requests"""
-
-from requests import get
+"""A World of Warships API wrapper with Aiohttp"""
+from aiohttp import ClientSession
 
 from wowspy.extras import Region, l_int, lst_of_int
 
 
-class Wows:
+class WowsAsync:
     """
     A World of Warships API wrapper
     """
 
-    def __init__(self, key: str):
+    def __init__(self, key: str, session: ClientSession):
         """
         Initialize the instance.
         :param key: the Wows api key.
+        :param session: the aiohttp ClientSession. Note the session is never
+        closed by this class.
         """
         self.__key = key
         self.__blankurl = 'https://api.worldofwarships.{}/wows/{}/{}/?'
         self.region = Region
+        self.session = session
 
-    def __get_res(self, region: Region, method_block: str, method_name: str,
-                  params: dict) -> dict:
+    async def __get_res(self, region: Region, method_block: str,
+                        method_name: str,
+                        params: dict) -> dict:
         res = self.__blankurl.format(region.value, method_block, method_name)
         params = {k: v for k, v in params.items() if v or isinstance(v, int)}
         params['application_id'] = self.__key
-        return get(res, params).json()
+        resp = await self.session.get(res, params=params)
+        async with resp:
+            js = await resp.json()
+        return js
 
-    def players(self, region: Region, search: str, *,
-                fields: str = None,
-                language: str = None,
-                limit: int = None,
-                type_: str = None) -> dict:
+    async def players(
+            self, region: Region, search: str, *,
+            fields: str = None,
+            language: str = None,
+            limit: int = None,
+            type_: str = None) -> dict:
         """
         Method returns partial list of players. The list is filtered by initial 
         characters of user name and sorted alphabetically.
@@ -80,13 +87,14 @@ class Wows:
             'limit': limit,
             'type': type_
         }
-        return self.__get_res(region, 'account', 'list', param)
+        return await self.__get_res(region, 'account', 'list', param)
 
-    def player_personal_data(self, region: Region, account_id: l_int, *,
-                             access_token: str = None,
-                             extra: str = None,
-                             fields: str = None,
-                             language: str = None) -> dict:
+    async def player_personal_data(
+            self, region: Region, account_id: l_int, *,
+            access_token: str = None,
+            extra: str = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns player details. Players may hide their game profiles, 
         use field hidden_profile for determination.
@@ -144,12 +152,13 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'account', 'info', param)
+        return await self.__get_res(region, 'account', 'info', param)
 
-    def player_achievements(self, region: Region, account_id: l_int, *,
-                            access_token: str = None,
-                            fields: str = None,
-                            language: str = None) -> dict:
+    async def player_achievements(
+            self, region: Region, account_id: l_int, *,
+            access_token: str = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns information about players' achievements. 
         Accounts with hidden game profiles are excluded from response. 
@@ -189,14 +198,15 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'account', 'achievements', param)
+        return await self.__get_res(region, 'account', 'achievements', param)
 
-    def player_statistics_by_date(self, region: Region, account_id: l_int, *,
-                                  access_token: str = None,
-                                  dates: str = None,
-                                  extra: str = None,
-                                  fields: str = None,
-                                  language: str = None) -> dict:
+    async def player_statistics_by_date(
+            self, region: Region, account_id: l_int, *,
+            access_token: str = None,
+            dates: str = None,
+            extra: str = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns statistics slices by dates in specified time span.
         :param region: The region that the method will use.
@@ -247,11 +257,12 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'account', 'statsbydate', param)
+        return await self.__get_res(region, 'account', 'statsbydate', param)
 
-    def information_about_encyclopedia(self, region: Region, *,
-                                       fields: str = None,
-                                       language: str = None) -> dict:
+    async def information_about_encyclopedia(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns information about encyclopedia.
         
@@ -284,14 +295,15 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'encyclopedia', 'info', param)
+        return await self.__get_res(region, 'encyclopedia', 'info', param)
 
-    def warships(self, region: Region, *,
-                 fields: str = None,
-                 language: str = None,
-                 nation: str = None,
-                 ship_id: l_int = None,
-                 type_: str = None) -> dict:
+    async def warships(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            nation: str = None,
+            ship_id: l_int = None,
+            type_: str = None) -> dict:
         """
         Method returns the list of ships available.
         
@@ -340,11 +352,12 @@ class Wows:
             'ship_id': ship_id,
             'type': type_
         }
-        return self.__get_res(region, 'encyclopedia', 'ships', param)
+        return await self.__get_res(region, 'encyclopedia', 'ships', param)
 
-    def achievements(self, region: Region, *,
-                     fields: str = None,
-                     language: str = None) -> dict:
+    async def achievements(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns information about achievements.
         
@@ -377,20 +390,22 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'encyclopedia', 'achievements', param)
+        return await self.__get_res(region, 'encyclopedia', 'achievements',
+                                    param)
 
-    def ship_parameters(self, region: Region, ship_id: int, *,
-                        artillery_id: int = None,
-                        dive_bomber_id: int = None,
-                        engine_id: int = None,
-                        fields: str = None,
-                        fighter_id: int = None,
-                        fire_control_id: int = None,
-                        flight_control_id: int = None,
-                        hull_id: int = None,
-                        language: str = None,
-                        torpedo_bomber_id: int = None,
-                        torpedoes_id: int = None) -> dict:
+    async def ship_parameters(
+            self, region: Region, ship_id: int, *,
+            artillery_id: int = None,
+            dive_bomber_id: int = None,
+            engine_id: int = None,
+            fields: str = None,
+            fighter_id: int = None,
+            fire_control_id: int = None,
+            flight_control_id: int = None,
+            hull_id: int = None,
+            language: str = None,
+            torpedo_bomber_id: int = None,
+            torpedoes_id: int = None) -> dict:
         """
         Method returns parameters of ships in all existing configurations.
 
@@ -463,13 +478,15 @@ class Wows:
             'torpedo_bomber_id': torpedo_bomber_id,
             'torpedoes_id': torpedoes_id
         }
-        return self.__get_res(region, 'encyclopedia', 'shipprofile', param)
+        return await self.__get_res(region, 'encyclopedia', 'shipprofile',
+                                    param)
 
-    def modules(self, region: Region, *,
-                fields: str = None,
-                language: str = None,
-                module_id: l_int = None,
-                type_: str = None) -> dict:
+    async def modules(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            module_id: l_int = None,
+            type_: str = None) -> dict:
         """
         Method returns the list of available modules that can be installed on 
         ships, such as hulls, engines, etc. At least one input filter parameter 
@@ -522,13 +539,14 @@ class Wows:
             'module_id': module_id,
             'type': type_
         }
-        return self.__get_res(region, 'encyclopedia', 'modules', param)
+        return await self.__get_res(region, 'encyclopedia', 'modules', param)
 
-    def exterior_items(self, region: Region, *,
-                       exterior_id: l_int = None,
-                       fields: str = None,
-                       language: str = None,
-                       type_: str = None) -> dict:
+    async def exterior_items(
+            self, region: Region, *,
+            exterior_id: l_int = None,
+            fields: str = None,
+            language: str = None,
+            type_: str = None) -> dict:
         """
         Method returns information about signals & camouflages.
 
@@ -569,12 +587,13 @@ class Wows:
             'language': language,
             'type': type_
         }
-        return self.__get_res(region, 'encyclopedia', 'exterior', param)
+        return await self.__get_res(region, 'encyclopedia', 'exterior', param)
 
-    def upgrades(self, region: Region, *,
-                 fields: str = None,
-                 language: str = None,
-                 upgrade_id: l_int = None) -> dict:
+    async def upgrades(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            upgrade_id: l_int = None) -> dict:
         """
         Method returns the list of available ship upgrades.
 
@@ -613,10 +632,11 @@ class Wows:
             'language': language,
             'upgrade_id': upgrade_id
         }
-        return self.__get_res(region, 'encyclopedia', 'upgrades', param)
+        return await self.__get_res(region, 'encyclopedia', 'upgrades', param)
 
-    def service_record_levels_information(self, region: Region, *,
-                                          fields: str = None) -> dict:
+    async def service_record_levels_information(
+            self, region: Region, *,
+            fields: str = None) -> dict:
         """
         Method returns information about Service Record levels.
 
@@ -628,13 +648,14 @@ class Wows:
         the method returns all fields. Max limit is 100.        
         
         """
-        return self.__get_res(region, 'encyclopedia', 'accountlevels',
-                              {'fields': fields})
+        return await self.__get_res(region, 'encyclopedia', 'accountlevels',
+                                    {'fields': fields})
 
-    def commanders(self, region: Region, *,
-                   commander_id: l_int = None,
-                   fields: str = None,
-                   language: str = None) -> dict:
+    async def commanders(
+            self, region: Region, *,
+            commander_id: l_int = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns the information about Commanders.
         
@@ -671,12 +692,13 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'encyclopedia', 'crews', param)
+        return await self.__get_res(region, 'encyclopedia', 'crews', param)
 
-    def commander_skills(self, region: Region, *,
-                         fields: str = None,
-                         language: str = None,
-                         skill_id: l_int = None) -> dict:
+    async def commander_skills(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            skill_id: l_int = None) -> dict:
         """
         :param region: The region that the method will use.
 
@@ -712,12 +734,13 @@ class Wows:
             'language': language,
             'skill_id': skill_id
         }
-        return self.__get_res(region, 'encyclopedia', 'crewskills', param)
+        return await self.__get_res(region, 'encyclopedia', 'crewskills', param)
 
-    def commanders_ranks(self, region: Region, *,
-                         fields: str = None,
-                         language: str = None,
-                         nation: str = None) -> dict:
+    async def commanders_ranks(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            nation: str = None) -> dict:
         """
         Method returns the information about Commanders' ranks.
 
@@ -753,11 +776,12 @@ class Wows:
             'language': language,
             'nation': nation
         }
-        return self.__get_res(region, 'encyclopedia', 'crewranks', param)
+        return await self.__get_res(region, 'encyclopedia', 'crewranks', param)
 
-    def battle_types(self, region: Region, *,
-                     fields: str = None,
-                     language: str = None) -> dict:
+    async def battle_types(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         The method returns information about battle types.
 
@@ -790,15 +814,17 @@ class Wows:
             'fields': fields,
             'language': language,
         }
-        return self.__get_res(region, 'encyclopedia', 'battletypes', param)
+        return await self.__get_res(region, 'encyclopedia', 'battletypes',
+                                    param)
 
-    def statistics_of_players_ships(self, region: Region, account_id: int, *,
-                                    access_token: str = None,
-                                    extra: str = None,
-                                    fields: str = None,
-                                    in_garage: bool = None,
-                                    language: str = None,
-                                    ship_id: l_int = None) -> dict:
+    async def statistics_of_players_ships(
+            self, region: Region, account_id: int, *,
+            access_token: str = None,
+            extra: str = None,
+            fields: str = None,
+            in_garage: bool = None,
+            language: str = None,
+            ship_id: l_int = None) -> dict:
         """
         Method returns general statistics for each ship of a player. 
         Accounts with hidden game profiles are excluded from response. 
@@ -869,12 +895,13 @@ class Wows:
             'language': language,
             'ship_id': ship_id
         }
-        return self.__get_res(region, 'ships', 'stats', param)
+        return await self.__get_res(region, 'ships', 'stats', param)
 
-    def ranked_battles_seasons(self, region: Region, *,
-                               fields: str = None,
-                               language: str = None,
-                               season_id: l_int = None) -> dict:
+    async def ranked_battles_seasons(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            season_id: l_int = None) -> dict:
         """
         Method returns information about Ranked Battles seasons.
 
@@ -912,9 +939,9 @@ class Wows:
             'language': language,
             'season_id': season_id
         }
-        return self.__get_res(region, 'seasons', 'info', param)
+        return await self.__get_res(region, 'seasons', 'info', param)
 
-    def ships_statistics_in_ranked_battles(
+    async def ships_statistics_in_ranked_battles(
             self, region: Region, account_id: int, *,
             access_token: str = None,
             fields: str = None,
@@ -969,9 +996,9 @@ class Wows:
             'season_id': season_id,
             'ship_id': ship_id
         }
-        return self.__get_res(region, 'seasons', 'shipstats', param)
+        return await self.__get_res(region, 'seasons', 'shipstats', param)
 
-    def players_statistics_in_ranked_battles(
+    async def players_statistics_in_ranked_battles(
             self, region: Region, account_id: l_int, *,
             access_token: str = None,
             fields: str = None,
@@ -1022,14 +1049,15 @@ class Wows:
             'language': language,
             'season_id': season_id
         }
-        return self.__get_res(region, 'seasons', 'accountinfo', param)
+        return await self.__get_res(region, 'seasons', 'accountinfo', param)
 
-    def clans(self, region: Region, *,
-              fields: str = None,
-              language: str = None,
-              limit: int = None,
-              page_no: int = None,
-              search: str = None) -> dict:
+    async def clans(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None,
+            limit: int = None,
+            page_no: int = None,
+            search: str = None) -> dict:
         """
         Method searches through clans and sorts them in a specified order.
         
@@ -1069,12 +1097,13 @@ class Wows:
             'page_no': page_no,
             'search': search
         }
-        return self.__get_res(region, 'clans', 'list', param)
+        return await self.__get_res(region, 'clans', 'list', param)
 
-    def clan_details(self, region: Region, clan_id: l_int, *,
-                     extra: str = None,
-                     fields: str = None,
-                     language: str = None) -> dict:
+    async def clan_details(
+            self, region: Region, clan_id: l_int, *,
+            extra: str = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns detailed clan information.
         
@@ -1112,12 +1141,13 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'clans', 'info', param)
+        return await self.__get_res(region, 'clans', 'info', param)
 
-    def player_clan_data(self, region: Region, account_id: l_int, *,
-                         extra: str = None,
-                         fields: str = None,
-                         language: str = None) -> dict:
+    async def player_clan_data(
+            self, region: Region, account_id: l_int, *,
+            extra: str = None,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns player clan data. Player clan data exist only for 
         accounts, that were participating in clan 
@@ -1157,11 +1187,12 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'clans', 'accountinfo', param)
+        return await self.__get_res(region, 'clans', 'accountinfo', param)
 
-    def clan_glossary(self, region: Region, *,
-                      fields: str = None,
-                      language: str = None) -> dict:
+    async def clan_glossary(
+            self, region: Region, *,
+            fields: str = None,
+            language: str = None) -> dict:
         """
         Method returns information on clan entities.
         
@@ -1190,4 +1221,4 @@ class Wows:
             'fields': fields,
             'language': language
         }
-        return self.__get_res(region, 'clans', 'glossary', param)
+        return await self.__get_res(region, 'clans', 'glossary', param)
