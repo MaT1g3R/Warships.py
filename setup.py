@@ -1,6 +1,13 @@
+import re
+
 from setuptools import find_packages, setup
 
-from wowspy import *
+
+def get_const(name, text):
+    return re.search(
+        r'^{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(name), text, re.MULTILINE
+    ).group(1)
+
 
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
@@ -8,13 +15,20 @@ with open('requirements.txt') as f:
 with open('README.md') as f:
     readme = f.read()
 
+with open('wowspy/__init__.py') as f:
+    t = f.read()
+    version = get_const('__version__', t)
+    title = get_const('__title__', t)
+    license_ = get_const('__license__', t)
+    author = get_const('__author__', t)
+
 setup(
-    name=__title__,
-    version=__version__,
+    name=title,
+    version=version,
     packages=find_packages(),
     url='https://github.com/MaT1g3R/Warships.py',
-    license=__license__,
-    author=__author__,
+    license=license_,
+    author=author,
     author_email='mat1g3r@gmail.com',
     description='A Python World of Warships API wrapper',
     install_requires=requirements,
